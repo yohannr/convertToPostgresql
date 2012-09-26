@@ -18,18 +18,17 @@
                     <tr>
                         <td><h1>&Eacute;tape 1</h1></td>
                         <td><h1>&Eacute;tape 2</h1></td>
-                        <td><h1>&Eacute;tape 3</h1></td>
                     </tr>
                     <tr>
                         <td>Script MYSQL à convertir :</td>
-                        <td>Fichier de destination :</td>
                         <td>Création du fichier :</td>
                     </tr>
                     <tr>
-					    <form name="convert" method="post" action="" enctype="multipart/form-data">
-                        <td><input type="file" name="fileMYSQL" id="filemysql" size="25" /></td>
-						<td><input type="text" name="filePGSQL" id="filepostgresql" size="30" value="C:\extract.sql" /></td> 
-                        <td><input type="submit" name="btnSubmit" value="Convertir !" id="btnSubmit" />	
+					    <form name="convert" id="convert" method="post" action="" enctype="multipart/form-data">
+							<input type="hidden" name="MAX_FILE_SIZE" value="1048576" />
+							<td><input type="file" name="fileMYSQL" id="filemysql" size="25" /></td>
+							<td><input type="submit" name="btnSubmit" value="Convertir !" id="btnSubmit" />
+						</form>
                     </td>
 					
                 </table>

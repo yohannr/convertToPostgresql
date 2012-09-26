@@ -3,10 +3,9 @@
  * Define actions for converting mysql file
  *
  * @file    indexControlleur.php
- * @date    08/01/2011
  * @author  Yohann REVERDY
  */
- 
+
 class indexControlleur
 {
 	private $nomTable;
@@ -16,22 +15,63 @@ class indexControlleur
 	{
 		if ($_FILES)
 		{
-			$fichierPgsql = 'file:///'.$_POST['filePGSQL'];
-						
-			if(empty($_POST['filePGSQL']))
-			{
-				$fichierPgsql = 'file:///C:\extract.sql';
+			$erreur = '';
+			$uploads_dir = dirname(__FILE__).'/uploads';
+			mkdir($uploads_dir, 0777);
+			
+			if ($_FILES['fileMYSQL']['error'] == UPLOAD_ERR_NO_FILE){
+				$erreur = 'fichier manquant';
 			}
 			
-			$contenu = $this->traiterfichier();
+			if (($_FILES['fileMYSQL']['error'] == UPLOAD_ERR_INI_SIZE) || ($_FILES['fileMYSQL']['error'] == UPLOAD_ERR_FORM_SIZE)) {
+				$erreur = 'dépassement taille de fichier';
+			}
+			
+			//check extension txt and sql
+			$extensions_valides = array( 'txt' , 'sql');
+			$extension_upload = strtolower(  substr(  strrchr($_FILES['fileMYSQL']['name'], '.')  ,1)  );
+			if (!in_array($extension_upload,$extensions_valides) ){
+				$erreur = 'extension non valide';
+			}
+			
+			if (strlen($erreur) > 0){
+				echo $erreur;
+				exit;
+			}
 					
-			$fp_pgsql = fopen($fichierPgsql, "wb");
-			fwrite($fp_pgsql, $contenu);
-			fclose($fp_pgsql);
+			$contenu = $this->traiterfichier();
+			
+			$tmp_name = $_FILES['fileMYSQL']['tmp_name'];
+			$name = $_FILES['fileMYSQL']['name'];
+			$upload_file = $uploads_dir.'/'.$name;
+			move_uploaded_file($tmp_name, $upload_file);
+			
+			//download file
+			if (file_exists($upload_file)) {
+				header('Content-Description: File Transfer');
+				header('Content-Type: application/octet-stream');
+				header('Content-Disposition: attachment; filename='.basename($upload_file));
+				header('Content-Transfer-Encoding: binary');
+				header('Expires: 0');
+				header('Cache-Control: must-revalidate');
+				header('Pragma: public');
+				header('Content-Length: ' . filesize($upload_file));
+				ob_clean();
+				flush();
+				readfile($upload_file);
+			}
+			else{
+				echo 'fin';
+				exit;
+			}
 				
 		}
 	}
 	
+	/** 
+	 * Deal with the mysql text file sent by the user
+	 * @return $contenuFichier string
+	 */
 	private function traiterFichier()
 	{
 		$fichierMysql = $_FILES['fileMYSQL']['tmp_name'];
@@ -44,15 +84,18 @@ class indexControlleur
 		while (!feof($fp_mysql))
 		{
 			$ligne = fgets( $fp_mysql , 1024 );
-			
 			$contenuFichier = $contenuFichier.$this->nouvelleLigne($ligne);
-			
 		}
 		fclose($fp_mysql);
 		return $contenuFichier;
 		
 	}
 	
+	/** 
+	 * Check a mysql line and convert it if necessary
+	 * @param $ligne string
+	 * @return $ligne string
+	 */
 	private function nouvelleLigne($ligne)
 	{
 		$commentaire = '';
@@ -110,14 +153,3 @@ class indexControlleur
 	}
 
 }
-				
-				
-				
-				
-				
-				
-				
-				
-				
-
-                    
