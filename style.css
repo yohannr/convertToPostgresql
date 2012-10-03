@@ -49,3 +49,8 @@ background-color: #a8e9ff;
 background: -moz-linear-gradient(top, #a8e9ff 0%, #0ed9f0 100%);
 -moz-border-radius: 5px 10px;
 }
+#erreur {
+margin-left: 2px;
+color: red;
+font-weight: bold;
+}

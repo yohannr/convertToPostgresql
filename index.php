@@ -9,9 +9,10 @@
 		<script type="text/javascript">
 			$(document).ready(function(){
 				$("#convert").submit(function(){
-					//if ("#filemysql").value == ""){
+					$("#erreur").html('');
 					if ( jQuery.trim($("#filemysql").val()).length==0 ) {
-						alert("fichier manquant");
+						$("#erreur").append('fichier manquant');
+						$("#erreur").fadeIn();
 						return false;
 					}
 					else
@@ -23,7 +24,8 @@
 						}
 						else
 						{
-							alert("extension non valide");
+							$("#erreur").append('extension non valide');
+							$("#erreur").fadeIn();
 							return false;
 						}
 					}
@@ -56,10 +58,9 @@
 							<td><input type="submit" name="btnSubmit" value="Convertir !" id="btnSubmit" />
 						</form>
                     </td>
-					
                 </table>
-
 			</div>
+			<div id="erreur"></div>
 		</div>
 	</body>
 </html>
