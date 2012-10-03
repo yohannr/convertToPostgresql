@@ -16,9 +16,6 @@ class indexControlleur
 		if ($_FILES)
 		{
 			$erreur = '';
-			$uploads_dir = dirname(__FILE__).'/uploads';
-			mkdir($uploads_dir, 0777);
-			
 			if ($_FILES['fileMYSQL']['error'] == UPLOAD_ERR_NO_FILE){
 				$erreur = 'fichier manquant';
 			}
@@ -38,7 +35,12 @@ class indexControlleur
 				echo $erreur;
 				exit;
 			}
-					
+		
+			$uploads_dir = dirname(__FILE__).'/uploads';
+			if (is_dir($uploads_dir) === false) {
+				mkdir($uploads_dir, 0777);
+			}
+				
 			$contenu = $this->traiterfichier();
 			
 			$tmp_name = $_FILES['fileMYSQL']['tmp_name'];

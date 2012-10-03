@@ -5,6 +5,32 @@
 		<title>ConverttoPOSTGRESQL</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<link rel="stylesheet" href="style.css" type="text/css" />
+		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+		<script type="text/javascript">
+			$(document).ready(function(){
+				$("#convert").submit(function(){
+					//if ("#filemysql").value == ""){
+					if ( jQuery.trim($("#filemysql").val()).length==0 ) {
+						alert("fichier manquant");
+						return false;
+					}
+					else
+					{
+						$taille = $("#filemysql").val().length;
+						$extension = $("#filemysql").val().substring($taille-3, $taille);
+						if (($extension == "sql") || ($extension == "txt")) {
+							return true;
+						}
+						else
+						{
+							alert("extension non valide");
+							return false;
+						}
+					}
+				});
+			});
+		</script>
+		
 	</head>
 	<body>
 	    <div id="outer_content">
